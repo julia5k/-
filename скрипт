@@ -1,0 +1,71 @@
+def config(M, key):
+    '''Функция формирует строки в сообщении'''
+    T=[]
+    i=0
+    while(i<(((len(M))//key))):
+        T.append(M[i*key:(i*key+key)])
+        i=i+1
+    return T
+def sredn(T, key):
+    '''Функция вычисляет средние значения для объектов'''
+    S=[]
+    summ=0
+    kol=0
+    for j in range(key):
+        for i in range(key):
+            if(int(T[i][j])!=0):
+                summ+=int(T[i][j])
+                kol+=1
+        S.append(summ/kol)
+        summ=0
+        kol=0
+    return S
+
+def koef(T,S,key):
+    K=[]
+    g=0
+    m=0
+    for j in range(key):
+        g=j+1
+        while(g<key):
+            ch=0
+            s1=0
+            s2=0
+            for i in range(key):
+                ch+=(float(T[i][j])-float(S[j]))*(float(T[i][g])-float(S[g]))
+                s1+=((float(T[i][j])-float(S[j]))**2)
+                s2+=((float(T[i][g])-float(S[g]))**2)
+            kor=sqrt(s1*s2)
+            K.append(float(ch)/float(kor))
+            g=g+1
+    return K
+
+from math import *
+print("Для расчёта коэффициента схожести введите 1")
+print("Для вычисления оценки введите 2")
+a=int(input())
+if a==1:
+    M=str(input("Введите рейтинги: "))
+    key=int(input("Введите разрядность таблицы: "))
+    z=config(M, key)
+    print(z)
+    l=sredn(z, key)
+    print(l)
+    r=koef(z,l,key)
+    print(r)
+if a==2:
+    sr=float(input("Введите среднюю оценку искомого объекта: "))
+    kol=int(input("Введите колчиство объектов, оценённых выбранным пользователем и имеющих наибольшую корреляцию с искомым объектом: "))
+    dr1=0
+    dr2=0
+    for i in range(kol):
+        print("Объект № ", i+1)
+        s=float(input("Введите коэффициент корреляции между искомым и вспомагательным объектом: "))
+        oz=float(input("Введите оценку, поствленную пользователем вспомагательному объекту: "))
+        sr=float(input("Введите среднюю оценку вспомагательного объекта: "))
+        dr1+=(s*(oz-sr))
+        dr2+=s
+    ozenka=sr+(dr1/dr2)
+    print("Искомая оценка: ", ozenka)
+if a!=1 and a!=2:
+    print("Ошибка")
